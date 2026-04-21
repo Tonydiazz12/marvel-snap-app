@@ -1,0 +1,42 @@
+/* Un fondo con gradiente para que el cristal se note */
+body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background-attachment: fixed;
+    color: #ffffff;
+}
+
+/* La magia del Glassmorphism (Efecto Cristal) */
+.glass-effect {
+    background: rgba(20, 20, 20, 0.45) !important; /* Fondo oscuro casi transparente */
+    backdrop-filter: blur(16px); /* El desenfoque del fondo */
+    -webkit-backdrop-filter: blur(16px); /* Soporte para Safari */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important; /* Borde sutil */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); /* Sombra suave para dar profundidad */
+    border-radius: 12px;
+}
+
+/* Estilos para la imagen de la carta */
+.card-img-top {
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    transition: transform 0.3s ease;
+}
+
+.card-img-top:hover {
+    transform: scale(1.05);
+}
+
+/* Ajustes para que el input (Select) también se vea cristalino */
+.form-select.glass-effect {
+    color: white;
+}
+.form-select.glass-effect option {
+    background: #203a43; /* Las opciones del select necesitan fondo sólido */
+    color: white;
+}
+
+.stat-badge {
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
