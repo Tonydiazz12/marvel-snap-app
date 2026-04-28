@@ -21,7 +21,7 @@ export class UI {
     // Nuevo método: Busca dinámicamente dónde escondió la API el Array de cartas
     _extractArray(data) {
         if (Array.isArray(data)) return data;
-        
+
         if (typeof data === 'object' && data !== null) {
             // Busca la primera propiedad que sea un array (ej. data.items, data.data)
             for (let key in data) {
@@ -41,7 +41,7 @@ export class UI {
 
     populateSelect(cardsData) {
         this.selectElement.innerHTML = '<option value="" selected>Elige una carta...</option>';
-        
+
         // Usamos nuestro extractor inteligente
         const cardList = this._extractArray(cardsData);
 
@@ -54,7 +54,7 @@ export class UI {
         cardList.forEach(card => {
             const option = document.createElement('option');
             // Usamos un fallback en caso de que la API use "_id" o no tenga ID
-            option.value = card.id || card._id || card.name; 
+            option.value = card.id || card._id || card.name;
             option.textContent = card.name || 'Carta sin nombre';
             this.selectElement.appendChild(option);
         });
@@ -64,10 +64,10 @@ export class UI {
 
     renderCardDetails(cardId, cardsData) {
         const cardList = this._extractArray(cardsData);
-        
+
         // Buscar la carta seleccionada
-        const card = cardList.find(c => 
-            (c.id && c.id.toString() === cardId.toString()) || 
+        const card = cardList.find(c =>
+            (c.id && c.id.toString() === cardId.toString()) ||
             (c._id && c._id.toString() === cardId.toString()) ||
             (c.name === cardId)
         );
@@ -78,7 +78,14 @@ export class UI {
         console.log("Datos exactos de la carta seleccionada:", card);
 
         // Agregamos más posibles nombres de propiedades que usan las APIs de Marvel Snap
-        const imageUrl = card.imageUrl || card.image || card.art || card.carddefid || 'https://via.placeholder.com/200x300?text=Sin+Imagen';
+        const imageUrl =
+            card.Image ||
+            card.imageUrl ||
+            card.image ||
+            card.art ||
+            card.image_url ||
+            card.thumbnail ||
+            'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg';
         const description = card.description || card.ability || 'Sin descripción disponible.';
         const cost = card.cost !== undefined ? card.cost : '?';
         const power = card.power !== undefined ? card.power : '?';

@@ -5,7 +5,7 @@ export class MarvelSnapAPI {
         this.apiHost = 'marvel-snap-api.p.rapidapi.com';
         
         // Esta es la URL exacta que me pasaste en tu código
-        this.baseUrl = 'https://marvel-snap-api.p.rapidapi.com/api/get-all-cards?page=1';
+        this.baseUrl = 'https://marvel-snap-api.p.rapidapi.com/api/get-all-cards';
     }
 
     async getClientIP() {
@@ -28,7 +28,7 @@ export class MarvelSnapAPI {
         }
         return [];
     }
-    
+
     async getCards() {
         let currentPage = 1;
         let keepFetching = true;
