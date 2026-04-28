@@ -16,10 +16,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 2. Cargar cartas de la API
     const cardsData = await api.getCards();
-    
+
     if (cardsData) {
         globalCardsData = cardsData;
         ui.populateSelect(cardsData);
+        ui.renderCatalog(cardsData);
     } else {
         ui.showError('No se pudieron cargar las cartas. Verifica tu API Key o conexión.');
         document.getElementById('card-select').innerHTML = '<option>Error de carga</option>';

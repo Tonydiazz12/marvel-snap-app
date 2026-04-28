@@ -7,18 +7,23 @@ body {
 
 /* La magia del Glassmorphism (Efecto Cristal) */
 .glass-effect {
-    background: rgba(20, 20, 20, 0.45) !important; /* Fondo oscuro casi transparente */
-    backdrop-filter: blur(16px); /* El desenfoque del fondo */
-    -webkit-backdrop-filter: blur(16px); /* Soporte para Safari */
-    border: 1px solid rgba(255, 255, 255, 0.1) !important; /* Borde sutil */
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); /* Sombra suave para dar profundidad */
+    background: rgba(20, 20, 20, 0.45) !important;
+    /* Fondo oscuro casi transparente */
+    backdrop-filter: blur(16px);
+    /* El desenfoque del fondo */
+    -webkit-backdrop-filter: blur(16px);
+    /* Soporte para Safari */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    /* Borde sutil */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    /* Sombra suave para dar profundidad */
     border-radius: 12px;
 }
 
 /* Estilos para la imagen de la carta */
 .card-img-top {
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
     transition: transform 0.3s ease;
 }
 
@@ -30,13 +35,32 @@ body {
 .form-select.glass-effect {
     color: white;
 }
+
 .form-select.glass-effect option {
-    background: #203a43; /* Las opciones del select necesitan fondo sólido */
+    background: #203a43;
+    /* Las opciones del select necesitan fondo sólido */
     color: white;
 }
 
 .stat-badge {
     font-size: 1.1rem;
     padding: 10px 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Tarjetas del catálogo */
+.catalog-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.catalog-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.catalog-card img {
+    border-radius: 8px;
+    max-height: 220px;
+    object-fit: cover;
 }

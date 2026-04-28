@@ -3,6 +3,7 @@ export class UI {
         this.ipElement = document.getElementById('client-ip');
         this.selectElement = document.getElementById('card-select');
         this.resultsContainer = document.getElementById('results-container');
+        this.catalogContainer = document.getElementById('catalog-container');
     }
 
     displayIP(ip) {
@@ -120,5 +121,31 @@ export class UI {
                 </div>
             </div>
         `;
+    }
+    renderCatalog(cardsData) {
+        const cardList = this._extractArray(cardsData);
+
+        this.catalogContainer.innerHTML = '';
+
+        cardList.forEach(card => {
+            const imageUrl = card.Image || 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg';
+
+            const cardElement = document.createElement('div');
+            cardElement.className = 'col-6 col-sm-4 col-md-3 col-lg-2 mb-4';
+
+            cardElement.innerHTML = `
+            <div class="catalog-card glass-effect p-2 h-100 text-center" data-id="${card.id}">
+                <img src="${imageUrl}" class="img-fluid card-img-top mb-2" alt="${card.name}">
+                <small class="text-white">${card.name}</small>
+            </div>
+        `;
+
+            cardElement.addEventListener('click', () => {
+                this.selectElement.value = card.id;
+                this.renderCardDetails(card.id, cardsData);
+            });
+
+            this.catalogContainer.appendChild(cardElement);
+        });
     }
 }
