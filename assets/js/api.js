@@ -19,6 +19,16 @@ export class MarvelSnapAPI {
         }
     }
 
+    _extractArray(data) {
+        if (Array.isArray(data)) return data;
+        if (typeof data === 'object' && data !== null) {
+            for (let key in data) {
+                if (Array.isArray(data[key])) return data[key];
+            }
+        }
+        return [];
+    }
+    
     async getCards() {
         let currentPage = 1;
         let keepFetching = true;
