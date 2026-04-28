@@ -20,9 +20,12 @@ export class MarvelSnapAPI {
     }
 
     async getCards() {
-        let allCards = [];
         let currentPage = 1;
         let keepFetching = true;
+        let uniqueCards = new Map();
+
+        // Función auxiliar para pausar la ejecución (Throttling)
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
         const options = {
             method: 'GET',
@@ -34,44 +37,56 @@ export class MarvelSnapAPI {
         };
 
         try {
-            // Bucle para traer varias páginas. 
-            // LIMITAMOS a 5 páginas máximo para no agotar tu cuota de RapidAPI.
             while (keepFetching && currentPage <= 5) {
-                console.log(`Descargando página ${currentPage}...`);
+                console.log(`Buscando página ${currentPage}...`);
                 
-                // Agregamos el número de página actual a la URL
-                const response = await fetch(`${this.baseUrl}?page=${currentPage}`, options);
+                const response = await fetch(`${this.baseUrl}?page=${currentPage}&limit=100`, options);
                 
-                if (!response.ok) {
-                    console.error(`Error en la página ${currentPage}`);
-                    break; 
+                // Si el servidor nos devuelve un 429, detenemos el bucle amablemente
+                if (response.status === 429) {
+                    console.warn(`Rate Limit alcanzado (Error 429) en la página ${currentPage}. Deteniendo descargas.`);
+                    break;
                 }
+
+                if (!response.ok) break;
                 
                 const data = await response.json();
-                
-                // Buscamos el arreglo de cartas dentro de la respuesta de esta página
-                let cardsInPage = [];
-                if (Array.isArray(data)) cardsInPage = data;
-                else if (data.cards) cardsInPage = data.cards;
-                else if (data.data) cardsInPage = data.data;
+                let cardsInPage = this._extractArray(data);
 
-                // Si la página viene vacía, significa que ya no hay más cartas en la base de datos
                 if (cardsInPage.length === 0) {
                     keepFetching = false; 
                 } else {
-                    // Juntamos las cartas de esta página con las que ya teníamos
-                    allCards = allCards.concat(cardsInPage);
-                    currentPage++; // Pasamos a la siguiente página
+                    let nuevasCartas = 0;
+
+                    cardsInPage.forEach(card => {
+                        const id = card.id || card._id || card.name;
+                        if (!uniqueCards.has(id)) {
+                            uniqueCards.set(id, card);
+                            nuevasCartas++;
+                        }
+                    });
+
+                    if (nuevasCartas === 0) {
+                        keepFetching = false;
+                    } else {
+                        currentPage++; 
+                        
+                        // 🔥 AQUI ESTÁ LA MAGIA: Esperamos 1000 milisegundos (1 segundo) antes de pedir la siguiente página
+                        if (currentPage <= 5) {
+                            console.log("Pausando 1 segundo para evitar el Error 429...");
+                            await delay(1000); 
+                        }
+                    }
                 }
             }
             
-            console.log(`¡Descarga completa! Total de cartas cargadas: ${allCards.length}`);
+            const allCards = Array.from(uniqueCards.values());
+            console.log(`¡Descarga completa! Total de cartas ÚNICAS reales: ${allCards.length}`);
             return allCards; 
 
         } catch (error) {
             console.error('Error al conectar con la API:', error);
-            // Si hay un error, devolvemos las cartas que hayamos logrado rescatar
-            return allCards.length > 0 ? allCards : null;
+            return Array.from(uniqueCards.values());
         }
     }
 }
